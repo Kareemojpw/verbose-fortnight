@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: 'AuroraMail - Temporary Inbox',
   description: 'Modern disposable email with realtime inbox.',
   authors: [{ name: 'Karim Mohamed', url: 'https://github.com/kareemoopp760' }]
+  description: 'Modern disposable email with realtime inbox.'
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Developed by Karim Mohamed (@kareemoopp760) • © 2026 Karim Mohamed. All rights reserved.
         </footer>
       </body>
+      <body>{children}</body>
     </html>
   );
 }
