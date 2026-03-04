@@ -1,3 +1,6 @@
+// Developed by Karim Mohamed (@kareemoopp760)
+// © 2026 Karim Mohamed. All rights reserved.
+
 import { z } from 'zod';
 
 export const emailSchema = z.string().email().max(320);

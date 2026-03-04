@@ -1,3 +1,6 @@
+// Developed by Karim Mohamed (@kareemoopp760)
+// © 2026 Karim Mohamed. All rights reserved.
+
 import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };

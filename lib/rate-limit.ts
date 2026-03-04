@@ -1,3 +1,6 @@
+// Developed by Karim Mohamed (@kareemoopp760)
+// © 2026 Karim Mohamed. All rights reserved.
+
 const bucket = new Map<string, { count: number; resetAt: number }>();
 
 export function checkRateLimit(key: string, max = 50, windowMs = 60_000) {
