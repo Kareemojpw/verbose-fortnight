@@ -20,6 +20,11 @@ export default function MessagePage() {
 
   useEffect(() => {
     fetch(`/api/message/${params.id}`, { cache: 'no-store' }).then((r) => r.json()).then(setMessage);
+export default function MessagePage({ params }: { params: { id: string } }) {
+  const [message, setMessage] = useState<MessageDetail | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/message/${params.id}`).then((r) => r.json()).then(setMessage);
   }, [params.id]);
 
   if (!message) return <main className="p-8">Loading...</main>;
@@ -48,6 +53,7 @@ export default function MessagePage() {
             </li>
           ))}
         </ul>
+        <ul>{message.attachments.map((a) => <li key={a.id}><a href={a.url} className="text-cyan-300">{a.fileName}</a> ({Math.round(a.size / 1024)} KB)</li>)}</ul>
       </section>
     </main>
   );
