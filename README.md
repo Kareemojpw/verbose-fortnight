@@ -3,7 +3,7 @@
 AuroraMail is a production-ready temporary email web app with a modern gradient UI, session-persistent disposable addresses, realtime inbox updates, provider abstraction, and deploy-ready Docker support.
 
 ## Stack
-- Next.js 14 (App Router) + TypeScript + TailwindCSS
+- Next.js 15 (App Router) + TypeScript + TailwindCSS
 - Next.js Route Handlers for API backend
 - Prisma + PostgreSQL
 - SSE realtime updates for inbox events
@@ -78,3 +78,7 @@ App runs on `http://localhost:3000`.
 npm test
 ```
 Includes unit tests for provider behavior and core API validation/rate-limiting behavior.
+
+---
+Developed by Karim Mohamed (@kareemoopp760)  
+© 2026 Karim Mohamed. All rights reserved.

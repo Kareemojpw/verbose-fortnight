@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 type Message = {
@@ -13,6 +14,8 @@ type Message = {
   attachments: { id: string }[];
 };
 
+export default function InboxPage() {
+  const params = useParams<{ id: string }>();
 export default function InboxPage({ params }: { params: { id: string } }) {
   const address = decodeURIComponent(params.id);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -28,12 +31,20 @@ export default function InboxPage({ params }: { params: { id: string } }) {
   }, [address, search, unread, withAttachments, sender]);
 
   const load = async () => {
+    const data = await fetch(`/api/inbox?${query}`, { cache: 'no-store' }).then((r) => r.json());
     setLoading(true);
     const data = await fetch(`/api/inbox?${query}`).then((r) => r.json());
     setMessages(data);
     setLoading(false);
   };
 
+  useEffect(() => {
+    void load();
+  }, [query]);
+
+  useEffect(() => {
+    const src = new EventSource(`/api/inbox/stream?address=${encodeURIComponent(address)}`);
+    src.onmessage = () => void load();
   useEffect(() => { load(); }, [query]);
   useEffect(() => {
     const src = new EventSource(`/api/inbox/stream?address=${encodeURIComponent(address)}`);
@@ -52,6 +63,18 @@ export default function InboxPage({ params }: { params: { id: string } }) {
           <label><input type="checkbox" checked={unread} onChange={(e) => setUnread(e.target.checked)} /> Unread</label>
           <label><input type="checkbox" checked={withAttachments} onChange={(e) => setWithAttachments(e.target.checked)} /> Attachments</label>
         </div>
+        <button
+          className="rounded bg-cyan-500/30 px-4 py-2"
+          onClick={() =>
+            fetch('/api/dev/mock-message', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ address })
+            }).then(() => void load())
+          }
+        >
+          Generate mock email
+        </button>
         <button className="rounded bg-cyan-500/30 px-4 py-2" onClick={() => fetch('/api/dev/mock-message', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ address }) }).then(load)}>Generate mock email</button>
         {loading ? <div className="card p-6">Loading skeleton...</div> : messages.length === 0 ? <div className="card p-6">No emails yet. Your sky is clear ✨</div> : (
           <ul className="space-y-3">

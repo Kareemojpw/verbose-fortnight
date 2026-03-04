@@ -2,6 +2,7 @@
 
 import DOMPurify from 'dompurify';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type MessageDetail = {
@@ -13,6 +14,12 @@ type MessageDetail = {
   attachments: { id: string; fileName: string; url: string; size: number }[];
 };
 
+export default function MessagePage() {
+  const params = useParams<{ id: string }>();
+  const [message, setMessage] = useState<MessageDetail | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/message/${params.id}`, { cache: 'no-store' }).then((r) => r.json()).then(setMessage);
 export default function MessagePage({ params }: { params: { id: string } }) {
   const [message, setMessage] = useState<MessageDetail | null>(null);
 
@@ -39,6 +46,13 @@ export default function MessagePage({ params }: { params: { id: string } }) {
       </section>
       <section className="card p-6">
         <h2 className="mb-2 text-lg font-semibold">Attachments</h2>
+        <ul>
+          {message.attachments.map((a) => (
+            <li key={a.id}>
+              <a href={a.url} className="text-cyan-300" target="_blank" rel="noreferrer noopener">{a.fileName}</a> ({Math.round(a.size / 1024)} KB)
+            </li>
+          ))}
+        </ul>
         <ul>{message.attachments.map((a) => <li key={a.id}><a href={a.url} className="text-cyan-300">{a.fileName}</a> ({Math.round(a.size / 1024)} KB)</li>)}</ul>
       </section>
     </main>
